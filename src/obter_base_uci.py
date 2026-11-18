@@ -21,7 +21,7 @@ SOURCE = "https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+a
 DOI = "10.24432/C5MC89"
 DATASET_ID = 697
 
-# Tabela publicada na Entrega 3, usada exclusivamente para verificação.
+# Tabela publicada na análise exploratória, usada exclusivamente para verificação.
 EXPECTED = {
     ("0", "Dropout"): 1287, ("0", "Enrolled"): 664, ("0", "Graduate"): 1374,
     ("1", "Dropout"): 134, ("1", "Enrolled"): 130, ("1", "Graduate"): 835,
@@ -56,12 +56,13 @@ def main() -> None:
     counts = count_outcomes(df)
     if counts != EXPECTED:
         raise ValueError(
-            "As contagens diferem da Entrega 3; nenhum snapshot será salvo. "
+            "As contagens diferem da análise exploratória; nenhum snapshot será salvo. "
             f"Contagens obtidas: {counts}"
         )
 
     # Momento de aquisição registrado somente após retorno e conferência.
-    obtained_at = datetime.now(timezone.utc)\n    stamp = obtained_at.strftime("%Y%m%dT%H%M%SZ")
+    obtained_at = datetime.now(timezone.utc)
+    stamp = obtained_at.strftime("%Y%m%dT%H%M%SZ")
     RAW.mkdir(parents=True, exist_ok=True)
     base = RAW / f"uci697_obtido_{stamp}"
     parquet = base.with_suffix(".parquet")
@@ -83,7 +84,7 @@ def main() -> None:
         "rows": len(df), "columns": len(df.columns),
         "pandas_version": pd.__version__, "pyarrow_version": pyarrow.__version__,
         "retrieval_client": "ucimlrepo.fetch_ucirepo(id=697)",
-        "matches_entrega3_counts": True,
+        "matches_referencia_counts": True,
         "historical_source_equivalence": (
             "Contagens coincidentes não provam identidade byte a byte com a cópia de 2026."
         ),
