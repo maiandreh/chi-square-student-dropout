@@ -28,9 +28,11 @@ chi-square-student-dropout/
     └── test_snapshots.py
 ```
 
-## Preparação (Ubuntu / Linux)
+## Preparação do ambiente (Linux e Windows)
 
-Requer Python 3.10+ e conexão com a internet para obter a base pela primeira vez.
+Requer Python 3.10+ e acesso à internet na primeira instalação e na obtenção da base da UCI. Recomenda-se Python 3.11 ou 3.12 para compatibilidade com as bibliotecas científicas. É necessário ter Git instalado para usar os comandos de clonagem.
+
+### Ubuntu / Linux (Bash)
 
 ```bash
 git clone https://github.com/maiandreh/chi-square-student-dropout.git
@@ -40,7 +42,42 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-Se o projeto já estiver clonado, execute `git pull origin main` na pasta do projeto. O diretório `.venv` é local e não deve ser versionado.
+### Windows (PowerShell)
+
+Instale o Python com o *Python Launcher* (`py`) e o Git. No PowerShell:
+
+```powershell
+git clone https://github.com/maiandreh/chi-square-student-dropout.git
+cd chi-square-student-dropout
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+Se o PowerShell bloquear a ativação de scripts, não é necessário modificar a política de execução do sistema. Execute diretamente o Python do ambiente virtual:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe src\obter_base_uci.py
+.\.venv\Scripts\python.exe src\calcular_quiquadrado.py
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+Se o comando `py` não existir, utilize `python -m venv .venv` após conferir que o Python está instalado e disponível no PATH.
+
+### Executar a análise em qualquer sistema
+
+Com o ambiente virtual ativado, os comandos Python são os mesmos no Windows e no Linux:
+
+```text
+python src/obter_base_uci.py
+python src/calcular_quiquadrado.py
+python -m unittest discover -s tests -v
+```
+
+Para calcular usando o Parquet recém-obtido, substitua o nome no argumento `--base` pelo arquivo gerado em `data/raw/`. Os separadores `/` dos exemplos são aceitos pelo Python também no Windows.
+
+Se já tiver clonado o projeto, faça `git pull origin main` antes de instalar as dependências. O diretório `.venv` é local e não deve ser versionado.
 
 ## Fluxo principal: obter diretamente da UCI (sem CSV manual)
 
