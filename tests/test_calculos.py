@@ -1,4 +1,4 @@
-"""Testes de regressão dos resultados da tabela publicada na Entrega 3.
+"""Testes de regressão dos resultados da tabela publicada na análise de referência.
 
 Executar da raiz: python -m unittest discover -s tests -v
 """
