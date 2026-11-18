@@ -1,6 +1,10 @@
-# Qui-Quadrado de Pearson: bolsa e situação acadêmica
+# Materiais de apoio a resumos expandidos — Qui-Quadrado e evasão no ensino superior
 
-Repositório de reprodução da análise desenvolvida para a disciplina de **Estatística e Probabilidade**, de André Luiz Pimenta Maia (PPGMCS/Unimontes), utilizando o conjunto **Predict Students' Dropout and Academic Success (UCI 697)**.
+Repositório **público de materiais de apoio, dados derivados, scripts e resultados verificáveis** para elaboração de resumos expandidos acadêmicos. Este conjunto de arquivos documenta uma aplicação do teste Qui-Quadrado de Pearson à associação entre recebimento de bolsa e situação acadêmica, usando o conjunto *Predict Students' Dropout and Academic Success* (UCI 697).
+
+**Responsável:** André Luiz Pimenta Maia — PPGMCS/Unimontes.
+
+O repositório é um material de apoio à produção e à conferência de textos científicos. **Não representa uma disciplina, uma atividade avaliativa específica nem a reprodução integral dos modelos de Romero e Liao (2025).** Os scripts documentam uma análise delimitada e seus pressupostos.
 
 ## Estrutura
 
