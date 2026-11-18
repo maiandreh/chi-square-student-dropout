@@ -1,3 +1,10 @@
-__pycache__/
+# Ambiente local Python
 .venv/
+__pycache__/
 *.pyc
+
+# Dados brutos baixados separadamente, não versionar
+data/raw/
+
+# Arquivos temporários do sistema
+.DS_Store
