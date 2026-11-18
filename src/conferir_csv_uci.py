@@ -1,4 +1,4 @@
-"""Compara a tabela da Entrega 3 ao CSV baixado da UCI.
+"""Compara a tabela da tabela de referência ao CSV baixado da UCI.
 
 Uso: python conferir_csv_uci.py /caminho/para/data.csv
 Não altera o arquivo original. Uma divergência provoca código de saída 1.
