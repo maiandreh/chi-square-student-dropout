@@ -152,6 +152,14 @@ A ferramenta de conferência assume ponto e vírgula como delimitador, verifica 
 
 A tabela agregada corresponde às frequências previamente documentadas em uma análise exploratória, elaborada a partir de uma cópia pública obtida anteriormente. Uma nova consulta à UCI que produza as mesmas seis contagens **não comprova a identidade byte a byte da cópia antiga com a fonte primária**. Essa distinção é mantida no código e na documentação.
 
+## Licenciamento, atribuição e privacidade
+
+O conjunto de dados **Predict Students' Dropout and Academic Success**, de Realinho, Vieira Martins, Machado e Baptista (2021), é disponibilizado pela UCI sob a licença [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/), conforme a [página oficial da base](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success). DOI: [10.24432/C5MC89](https://doi.org/10.24432/C5MC89).
+
+A tabela em `data/processed/` é uma **agregação derivada** da base, limitada às frequências conjuntas de bolsa e situação acadêmica. Os scripts de obtenção e análise são materiais deste repositório; não são código dos autores da UCI ou de Romero e Liao. O conjunto completo de registros individuais **não está versionado**. Snapshots baixados localmente devem permanecer em `data/raw/`, que está excluído pelo `.gitignore`.
+
+A licença CC BY 4.0 indicada acima pertence **aos dados originais**, não constitui automaticamente licença de reutilização dos scripts deste repositório. A publicação destes códigos não deve ser interpretada como endosso da UCI, de seus autores ou da PLOS.
+
 ## Referências
 
 - COCHRAN, W. G. Some methods for strengthening the common χ² tests. *Biometrics*, 1954. DOI: 10.2307/3001616.
