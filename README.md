@@ -1,34 +1,31 @@
 # Qui-Quadrado de Pearson: bolsa e situação acadêmica
 
-Repositório de reprodutibilidade da aplicação estatística documentada na **Entrega 3** de André Luiz Pimenta Maia (PPGMCS/Unimontes). Base de referência: **UCI 697 — Predict Students' Dropout and Academic Success**.
+Repositório de reprodução da análise documentada na **Entrega 3**, de André Luiz Pimenta Maia (PPGMCS/Unimontes), utilizando o conjunto **Predict Students' Dropout and Academic Success (UCI 697)**.
 
-## Organização
+## Estrutura
 
 ```text
 chi-square-student-dropout/
 ├── README.md
-├── .gitignore
 ├── requirements.txt
+├── .gitignore
 ├── data/
-│   └── processed/
-│       └── tabela_observada_entrega3.csv
+│   ├── processed/
+│   │   └── tabela_observada_entrega3.csv    # Contagens históricas
+│   └── raw/                                 # Snapshots UCI; ignorados pelo Git
 ├── src/
-│   ├── calcular_quiquadrado.py
-│   └── conferir_csv_uci.py
+│   ├── obter_base_uci.py                    # Download direto, timestamp, Parquet e metadados
+│   ├── calcular_quiquadrado.py              # Teste da tabela ou do snapshot
+│   └── conferir_csv_uci.py                  # Conferência de CSV manual (legado)
 ├── results/
-│   └── resultados.json
+│   └── resultados.json                      # Reprodução da tabela histórica
 └── tests/
     └── test_calculos.py
 ```
 
-- **data/processed/**: a tabela agregada documentada na Entrega 3, não o arquivo bruto da UCI.
-- **src/**: cálculos estatísticos e auditoria do CSV obtido separadamente.
-- **results/**: saída da reprodução do teste.
-- **tests/**: verificações automatizadas dos resultados esperados.
+## Preparação (Ubuntu / Linux)
 
-## Preparar o ambiente no Ubuntu
-
-Requer Python 3.10 ou superior.
+Requer Python 3.10+ e conexão com a internet para obter a base pela primeira vez.
 
 ```bash
 git clone https://github.com/maiandreh/chi-square-student-dropout.git
@@ -38,18 +35,47 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-Se o repositório já foi clonado, basta entrar na pasta e executar `git pull`, antes de ativar o ambiente.
+Se o projeto já estiver clonado, execute `git pull origin main` na pasta do projeto. O diretório `.venv` é local e não deve ser versionado.
 
-## Reproduzir o teste
+## Fluxo principal: obter diretamente da UCI (sem CSV manual)
+
+A UCI disponibiliza o cliente Python `ucimlrepo`. O script usa `fetch_ucirepo(id=697)` e guarda todas as 37 colunas em **Parquet**, preservando os nomes originais:
+
+```bash
+python src/obter_base_uci.py
+```
+
+São criados dois arquivos locais com **carimbo de data e hora UTC da obtenção**:
+
+```text
+data/raw/uci697_obtido_YYYYMMDDTHHMMSSZ.parquet
+data/raw/uci697_obtido_YYYYMMDDTHHMMSSZ_metadata.json
+```
+
+O arquivo de metadados registra: ID e DOI, URL oficial, timestamp UTC, número de linhas/colunas, versões das bibliotecas, nome do snapshot e **SHA-256 do Parquet salvo**. O script exige 4.424 linhas, 37 colunas e as seis contagens esperadas. Se houver divergência, informa o erro em vez de publicar dados incompatíveis com a análise original.
+
+Para executar o teste **diretamente sobre o snapshot Parquet**, use o nome efetivamente gerado:
+
+```bash
+python src/calcular_quiquadrado.py --base data/raw/uci697_obtido_YYYYMMDDTHHMMSSZ.parquet
+```
+
+O resultado será salvo separadamente em:
+
+```text
+results/uci697_obtido_YYYYMMDDTHHMMSSZ_resultados.json
+```
+
+**Atenção:** substitua `YYYYMMDDTHHMMSSZ` pelo carimbo presente no arquivo. O timestamp é o **instante da consulta**, não uma data de coleta dos estudantes ou de atualização da UCI. O SHA-256 identifica os bytes da cópia Parquet local — **não é o hash do arquivo CSV original**.
+
+## Reproduzir a Entrega 3 sem baixar a base
 
 ```bash
 python src/calcular_quiquadrado.py
 python -m unittest discover -s tests -v
 ```
 
-A saída será escrita em `results/resultados.json` e inclui frequências observadas/esperadas, contribuição por célula, estatística de Pearson, graus de liberdade, p-valor, V de Cramér e proporções de evasão.
-
-### Frequências utilizadas
+Esse caminho utiliza apenas a tabela documentada e escreve `results/resultados.json`.
 
 | Bolsa | Dropout | Enrolled | Graduate | Total |
 |---|---:|---:|---:|---:|
@@ -57,26 +83,34 @@ A saída será escrita em `results/resultados.json` e inclui frequências observ
 | Com bolsa | 134 | 130 | 835 | 1.099 |
 | Total | 1.421 | 794 | 2.209 | 4.424 |
 
-Resultados: **χ²(2) = 409,9431; p ≈ 9,59 × 10⁻⁹⁰; V de Cramér = 0,3044**. A menor frequência esperada é cerca de **197,24**.
+Resultados esperados: **χ²(2) = 409,9431; p ≈ 9,59 × 10⁻⁹⁰; V de Cramér = 0,3044**. A menor frequência esperada é aproximadamente 197,244. Não se trata de prova de efeito causal.
 
-O teste evidencia associação na tabela examinada, **não causalidade**.
+## Alternativa: baixar o CSV manualmente
 
-## Obter e conferir os dados oficiais
+Se preferir a versão distribuída como arquivo, obtenha-a em:
 
-1. Acesse a página oficial [UCI 697](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success), DOI: **10.24432/C5MC89**.
-2. Baixe o conjunto **Predict Students' Dropout and Academic Success** e extraia o CSV.
-3. Preserve o arquivo bruto sem alterações, preferencialmente em `data/raw/` (ignorado pelo Git).
-4. Compare as seis contagens com a tabela utilizada no trabalho:
+- [Página oficial UCI 697](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success)
+- DOI: **10.24432/C5MC89**.
+
+Extraia o CSV, preserve-o sem edições em `data/raw/` e execute:
 
 ```bash
 python src/conferir_csv_uci.py data/raw/data.csv
 ```
 
-Substitua o caminho pelo nome real do CSV extraído, se diferente. O script espera as colunas `Scholarship holder` e `Target`, com delimitador ponto e vírgula. Retorna código de saída 1 diante de divergências e **não modifica o arquivo bruto**.
+A ferramenta de conferência assume ponto e vírgula como delimitador, verifica as variáveis `Scholarship holder` e `Target` e compara todas as seis contagens. Os dados brutos e snapshots ficam ignorados pelo Git, evitando republicação acidental.
 
-**Limitação de proveniência:** a tabela utilizada foi recuperada da Entrega 3. A correspondência exata entre a cópia de dados então examinada e o arquivo original da UCI ainda depende dessa conferência. Por esse motivo, não disponibilizamos um CSV bruto presumido como oficial.
+## Escolha de formato
 
-## Referências utilizadas
+- **Parquet:** formato recomendado para os snapshots locais, com preservação de esquema, tipos de dados e leitura eficiente pelo pandas.
+- **CSV:** formato de intercâmbio e auditoria; continua disponível no repositório da UCI.
+- **JSON:** utilizado apenas para os resultados e os metadados; não para os 4.424 registros tabulares.
+
+## Limitação de proveniência
+
+A tabela agregada original foi transcrita da Entrega 3, elaborada a partir de uma cópia pública obtida anteriormente. Uma nova consulta à UCI que produza as mesmas seis contagens **não comprova a identidade byte a byte da cópia antiga com a fonte primária**. Essa distinção é mantida no código e na documentação.
+
+## Referências usadas no trabalho
 
 - COCHRAN, W. G. Some methods for strengthening the common χ² tests. *Biometrics*, 1954. DOI: 10.2307/3001616.
 - REALINHO, V. et al. Predict Students' Dropout and Academic Success. *UCI Machine Learning Repository*, 2021. DOI: 10.24432/C5MC89.
