@@ -1,4 +1,4 @@
-"""Reproduz o teste de Pearson a partir da tabela publicada na Entrega 3.
+"""Reproduz o teste de Pearson a partir da tabela publicada na análise de referência.
 
 Este cálculo não constitui nova extração nem autenticação do CSV oficial.
 """
@@ -31,18 +31,18 @@ def carregar_observados(base_parquet: Path | None = None) -> np.ndarray:
         tabela = pd.crosstab(bolsa.astype(int), target)
         expected_cols = ["Dropout", "Enrolled", "Graduate"]
         if set(tabela.columns) != set(expected_cols) or set(tabela.index) != {0, 1}:
-            raise ValueError("Categorias incompatíveis com a tabela da Entrega 3")
+            raise ValueError("Categorias incompatíveis com a tabela da análise de referência")
         observados = tabela.loc[[0, 1], expected_cols].to_numpy(dtype=int)
         if observados.shape != (2, 3) or observados.sum() != 4424:
             raise ValueError("Total ou formato inesperado no snapshot UCI")
         return observados
-    with (BASE / "data" / "processed" / "tabela_observada_entrega3.csv").open(encoding="utf-8", newline="") as arquivo:
+    with (BASE / "data" / "processed" / "frequencias_observadas_bolsa_situacao.csv").open(encoding="utf-8", newline="") as arquivo:
         linhas = list(csv.DictReader(arquivo))
     if [linha["bolsa"] for linha in linhas] != list(GRUPOS):
-        raise ValueError("Grupos diferentes dos registrados na Entrega 3")
+        raise ValueError("Grupos diferentes dos registrados na análise de referência")
     observados = np.array([[int(linha[c]) for c in COLUNAS] for linha in linhas], dtype=int)
     if observados.shape != (2, 3) or (observados < 0).any() or observados.sum() != 4424:
-        raise ValueError("Tabela inconsistente com a Entrega 3")
+        raise ValueError("Tabela inconsistente com a análise de referência")
     return observados
 
 
@@ -61,7 +61,7 @@ def calcular(base_parquet: Path | None = None) -> dict:
         "proveniencia": (
             f"Snapshot UCI: {base_parquet.name}; contagens derivadas da base obtida"
             if base_parquet is not None
-            else "Tabela da Entrega 3; equivalência com CSV oficial não verificada"
+            else "Frequências da análise exploratória; correspondência exata com CSV oficial ainda não verificada"
         ),
         "grupos": list(GRUPOS),
         "desfechos": list(COLUNAS),
@@ -79,10 +79,10 @@ def calcular(base_parquet: Path | None = None) -> dict:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Reproduz o teste Qui-Quadrado da Entrega 3.")
+    parser = argparse.ArgumentParser(description="Calcula o teste de independência Qui-Quadrado de Pearson.")
     parser.add_argument(
         "--base", type=Path, default=None,
-        help="Snapshot .parquet obtido da UCI; sem opção, usa a tabela agregada da Entrega 3",
+        help="Snapshot .parquet obtido da UCI; sem opção, usa a tabela de frequências observadas",
     )
     args = parser.parse_args()
     if args.base is not None and args.base.suffix.lower() != ".parquet":
