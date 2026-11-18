@@ -1,6 +1,6 @@
 # Qui-Quadrado de Pearson: bolsa e situação acadêmica
 
-Repositório de reprodução da análise documentada na **Entrega 3**, de André Luiz Pimenta Maia (PPGMCS/Unimontes), utilizando o conjunto **Predict Students' Dropout and Academic Success (UCI 697)**.
+Repositório de reprodução da análise desenvolvida para a disciplina de **Estatística e Probabilidade**, de André Luiz Pimenta Maia (PPGMCS/Unimontes), utilizando o conjunto **Predict Students' Dropout and Academic Success (UCI 697)**.
 
 ## Estrutura
 
@@ -11,7 +11,7 @@ chi-square-student-dropout/
 ├── .gitignore
 ├── data/
 │   ├── processed/
-│   │   └── tabela_observada_entrega3.csv    # Contagens históricas
+│   │   └── frequencias_observadas_bolsa_situacao.csv    # Contagens históricas
 │   └── raw/                                 # Snapshots UCI; ignorados pelo Git
 ├── src/
 │   ├── obter_base_uci.py                    # Download direto, timestamp, Parquet e metadados
@@ -20,7 +20,8 @@ chi-square-student-dropout/
 ├── results/
 │   └── resultados.json                      # Reprodução da tabela histórica
 └── tests/
-    └── test_calculos.py
+    ├── test_calculos.py
+    └── test_snapshots.py
 ```
 
 ## Preparação (Ubuntu / Linux)
@@ -68,7 +69,7 @@ results/uci697_obtido_YYYYMMDDTHHMMSSZ_resultados.json
 
 **Atenção:** substitua `YYYYMMDDTHHMMSSZ` pelo carimbo presente no arquivo. O timestamp é o **instante da consulta**, não uma data de coleta dos estudantes ou de atualização da UCI. O SHA-256 identifica os bytes da cópia Parquet local — **não é o hash do arquivo CSV original**.
 
-## Reproduzir a Entrega 3 sem baixar a base
+## Reproduzir a análise de referência sem baixar a base
 
 ```bash
 python src/calcular_quiquadrado.py
@@ -108,9 +109,9 @@ A ferramenta de conferência assume ponto e vírgula como delimitador, verifica 
 
 ## Limitação de proveniência
 
-A tabela agregada original foi transcrita da Entrega 3, elaborada a partir de uma cópia pública obtida anteriormente. Uma nova consulta à UCI que produza as mesmas seis contagens **não comprova a identidade byte a byte da cópia antiga com a fonte primária**. Essa distinção é mantida no código e na documentação.
+A tabela agregada corresponde às frequências previamente documentadas em uma análise exploratória, elaborada a partir de uma cópia pública obtida anteriormente. Uma nova consulta à UCI que produza as mesmas seis contagens **não comprova a identidade byte a byte da cópia antiga com a fonte primária**. Essa distinção é mantida no código e na documentação.
 
-## Referências usadas no trabalho
+## Referências
 
 - COCHRAN, W. G. Some methods for strengthening the common χ² tests. *Biometrics*, 1954. DOI: 10.2307/3001616.
 - REALINHO, V. et al. Predict Students' Dropout and Academic Success. *UCI Machine Learning Repository*, 2021. DOI: 10.24432/C5MC89.
