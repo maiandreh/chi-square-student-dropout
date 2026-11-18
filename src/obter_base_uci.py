@@ -61,7 +61,7 @@ def main() -> None:
         )
 
     # Momento de aquisição registrado somente após retorno e conferência.
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    obtained_at = datetime.now(timezone.utc)\n    stamp = obtained_at.strftime("%Y%m%dT%H%M%SZ")
     RAW.mkdir(parents=True, exist_ok=True)
     base = RAW / f"uci697_obtido_{stamp}"
     parquet = base.with_suffix(".parquet")
@@ -77,7 +77,7 @@ def main() -> None:
         "dataset_id": DATASET_ID,
         "doi": DOI,
         "source_url": SOURCE,
-        "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "retrieved_at_utc": obtained_at.isoformat(timespec="seconds"),
         "snapshot_file": parquet.name,
         "sha256_parquet": digest,
         "rows": len(df), "columns": len(df.columns),
