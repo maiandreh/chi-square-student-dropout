@@ -135,11 +135,10 @@ A tabela agregada foi produzida a partir de uma cópia pública dos dados. O rep
 
 O conjunto completo de registros não é versionado: `data/raw/` está excluído pelo `.gitignore`. Parquet é utilizado nos snapshots, CSV nas frequências agregadas e JSON nos resultados e metadados.
 
-## Fonte, atribuição e licença dos dados
+## Fonte e licença dos dados
 
-- **Conjunto:** Realinho, V. et al. *Predict Students' Dropout and Academic Success*. UCI Machine Learning Repository, 2021. DOI: [10.24432/C5MC89](https://doi.org/10.24432/C5MC89).
-- **Licença da base:** [Creative Commons Attribution 4.0 (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
-- **Artigo relacionado:** Romero, S.; Liao, X. *Statistical and machine learning models for predicting university dropout and scholarship impact*. PLOS ONE, 2025. DOI: [10.1371/journal.pone.0325047](https://doi.org/10.1371/journal.pone.0325047).
-- **Referência metodológica:** Cochran, W. G. *Some methods for strengthening the common χ² tests*. Biometrics, 1954. DOI: [10.2307/3001616](https://doi.org/10.2307/3001616).
+- **Dataset:** *Predict Students' Dropout and Academic Success*, de Realinho et al., disponível no [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success).
+- **DOI:** [10.24432/C5MC89](https://doi.org/10.24432/C5MC89).
+- **Licença dos dados:** [Creative Commons Attribution 4.0 (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 
-A licença CC BY 4.0 corresponde aos dados da UCI e não define automaticamente a licença dos scripts deste repositório.
+Essa licença se refere aos dados da UCI, não concede automaticamente direitos de reutilização sobre os scripts deste repositório.
