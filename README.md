@@ -10,13 +10,17 @@ O repositório utiliza o conjunto [Predict Students' Dropout and Academic Succes
 chi-square-student-dropout/
 ├── README.md
 ├── requirements.txt
+├── requirements-ci.txt          # Versões diretas fixadas para CI
+├── CITATION.cff
+├── .github/workflows/tests.yml # Testes no Linux e Windows
 ├── .gitignore
 ├── data/
 │   ├── processed/
 │   │   └── frequencias_observadas_bolsa_situacao.csv
 │   └── raw/                       # Snapshots locais, não versionados
 ├── src/
-│   ├── obter_base_uci.py         # Obtém os dados diretamente da UCI
+│   ├── obter_base_uci.py         # Obtém e preserva snapshots da UCI
+│   ├── validar_base_uci.py       # Compara snapshot com dados de referência
 │   ├── calcular_quiquadrado.py   # Executa o teste de independência
 │   └── conferir_csv_uci.py       # Confere um CSV baixado manualmente
 ├── results/
@@ -82,19 +86,27 @@ python src/obter_base_uci.py
 A recuperação utiliza `ucimlrepo.fetch_ucirepo(id=697)` e salva um snapshot local em Parquet, acompanhado de metadados:
 
 ```text
-data/raw/uci697_obtido_YYYYMMDDTHHMMSSZ.parquet
-data/raw/uci697_obtido_YYYYMMDDTHHMMSSZ_metadata.json
+data/raw/uci697_obtido_YYYYMMDDTHHMMSSffffffZ.parquet
+data/raw/uci697_obtido_YYYYMMDDTHHMMSSffffffZ_metadata.json
 ```
 
-O carimbo identifica a data e hora UTC da obtenção, **não** a data de coleta original. Os metadados contêm identificador da fonte, DOI, dimensões, versões de bibliotecas e SHA-256 do arquivo Parquet.
+O carimbo identifica a data e hora UTC da obtenção, **não** a data de coleta original. Os metadados contêm identificador da fonte, DOI, dimensões, versões de bibliotecas e SHA-256 do arquivo Parquet. **A obtenção não depende de as contagens coincidirem com a tabela de referência**: um eventual novo conjunto continua armazenado para inspeção.
+
+Valide explicitamente o snapshot (substituindo o nome pelo que foi criado):
+
+```bash
+python src/validar_base_uci.py data/raw/uci697_obtido_YYYYMMDDTHHMMSSffffffZ.parquet
+```
+
+O validador produz `results/uci697_obtido_..._validacao.json`. Se encontrar divergências, apresenta as diferenças e encerra com código 1, sem excluir ou modificar o snapshot. **Não compare diretamente os resultados estatísticos com os valores abaixo antes de verificar a compatibilidade.**
 
 Para analisar o snapshot, substitua o nome abaixo pelo arquivo gerado:
 
 ```bash
-python src/calcular_quiquadrado.py --base data/raw/uci697_obtido_YYYYMMDDTHHMMSSZ.parquet
+python src/calcular_quiquadrado.py --base data/raw/uci697_obtido_YYYYMMDDTHHMMSSffffffZ.parquet
 ```
 
-A saída correspondente será salva em `results/uci697_obtido_YYYYMMDDTHHMMSSZ_resultados.json`.
+A saída correspondente será salva em `results/uci697_obtido_YYYYMMDDTHHMMSSffffffZ_resultados.json`.
 
 ### 3. Conferir um CSV obtido manualmente (opcional)
 
@@ -113,6 +125,8 @@ python -m unittest discover -s tests -v
 ```
 
 Os mesmos comandos Python funcionam no Linux e no Windows quando o ambiente virtual está ativado. Para atualizar uma cópia já clonada, execute `git pull origin main`.
+
+A integração contínua (`.github/workflows/tests.yml`) executa os testes, valida a sintaxe e reproduz as estatísticas em Ubuntu e Windows com Python 3.11 e 3.12. A CI não consulta a UCI, para manter os testes determinísticos. O arquivo `requirements-ci.txt` fixa as **dependências diretas** utilizadas nessa matriz; ele não é um lockfile completo das dependências transitivas.
 
 ## Resultados de referência
 
@@ -134,6 +148,10 @@ As estatísticas evidenciam associação na tabela analisada, não uma relação
 A tabela agregada foi produzida a partir de uma cópia pública dos dados. O repositório inclui as contagens e os scripts necessários à reprodução das estatísticas. O fluxo de obtenção direta permite comparar os resultados com uma nova recuperação da UCI, mas contagens coincidentes não comprovam identidade byte a byte entre cópias de momentos diferentes.
 
 O conjunto completo de registros não é versionado: `data/raw/` está excluído pelo `.gitignore`. Parquet é utilizado nos snapshots, CSV nas frequências agregadas e JSON nos resultados e metadados.
+
+## Uso e citação do software
+
+O arquivo [`CITATION.cff`](CITATION.cff) contém os metadados de autoria e citação do repositório. A licença de reutilização do **código** ainda não foi definida; não confunda esse ponto com a licença dos dados.
 
 ## Fonte e licença dos dados
 
