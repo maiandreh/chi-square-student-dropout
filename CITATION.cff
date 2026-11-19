@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "Se utilizar este software, cite esta versão do repositório."
+type: software
+title: "Chi-Square Student Dropout"
+authors:
+  - family-names: "Maia"
+    given-names: "André Luiz Pimenta"
+repository-code: "https://github.com/maiandreh/chi-square-student-dropout"
+url: "https://github.com/maiandreh/chi-square-student-dropout"
+abstract: "Scripts e dados agregados para reproduzir o teste Qui-Quadrado de independência entre bolsa e situação acadêmica na base UCI 697."
+keywords:
+  - "chi-square"
+  - "reproducibility"
+  - "student dropout"
