@@ -151,7 +151,7 @@ O conjunto completo de registros não é versionado: `data/raw/` está excluído
 
 ## Uso e citação do software
 
-O arquivo [`CITATION.cff`](CITATION.cff) contém os metadados de autoria e citação do repositório. A licença de reutilização do **código** ainda não foi definida; não confunda esse ponto com a licença dos dados.
+O arquivo [`CITATION.cff`](CITATION.cff) contém os metadados para citar o repositório. O código original está disponível sob a [licença MIT](LICENSE), gratuita e permissiva. Essa licença não substitui a licença dos dados de terceiros.
 
 ## Fonte e licença dos dados
 
