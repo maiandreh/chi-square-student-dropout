@@ -1,0 +1,8 @@
+# Versões diretas propostas para a matriz de integração contínua.
+# Diferentemente de um lockfile completo, dependências transitivas não estão fixadas.
+# A aprovação nos jobs da CI deve confirmar a compatibilidade em Linux e Windows.
+numpy==2.2.6
+scipy==1.15.3
+pandas==2.2.3
+pyarrow==19.0.1
+ucimlrepo==0.0.7
