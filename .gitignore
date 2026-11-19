@@ -8,3 +8,7 @@ data/raw/
 
 # Arquivos temporários do sistema
 .DS_Store
+
+# Resultados derivados de snapshots locais, específicos de cada obtenção
+results/uci697_obtido_*_resultados.json
+results/uci697_obtido_*_validacao.json
